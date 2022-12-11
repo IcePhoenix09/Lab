@@ -1,53 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: CLSCompliant(true)]
 namespace Lab3
 {
     internal class Program
     {
         enum MenuOptions : byte
         {
-            // Виконати програму
             Read = 1,
-            // Вийти з програми
             Send,
             Change_channel,
             Exit,
         }
 
-        struct Messange
+        class Messange
         {
-            private string Text;
-            private string Athor;
-            private DateTime Time;
+            public string Text;
+            public string Athor;
+            public DateTime Time;
+
+            public Messange(string text, string athor, DateTime time)
+            {
+                this.Text = text;
+                this.Athor = athor;
+                this.Time = time;   
+            }
+
+            public Messange(string text, string athor)
+            {
+                this.Text = text;
+                this.Athor = athor;
+                this.Time = DateTime.Now;
+            }
+
+            public Messange(string text)
+            {
+                this.Text = text;
+                this.Athor = "unknown";
+                this.Time = DateTime.Now;
+            }
+
         }
 
         class Database
         {
-            // private List<List<Messange>> ChatList { get; set; }
+            public short channel_number { get; set; }
+
+            private Dictionary<short, List<Messange>> ChatDict { get; set; }
             public Database()
             {
-                
+                channel_number = 1;
+                ChatDict = new Dictionary<short, List<Messange>>();
+                LoadData();
             }
 
             public void LoadData()
             {
-            
+                Messange m1 = new Messange("Hi");
+                Messange m2 = new Messange("Hi", "Roma");
+                ChatDict.Add(1, new List<Messange>{m1, m2});
+
             }
 
-            public void Print_chat(short cannel)
+            public void Print_all_chat()
             {
-                Console.WriteLine($"Read:");
+                foreach (var chat in ChatDict.Values)
+                {
+                    foreach (var msq in chat)
+                    {
+                        Console.WriteLine($"{msq.Time} | {msq.Athor} | {msq.Text}");
+
+                    }
+                }
+
             }
 
-            public void Send_messange(string msq)
+            public void Print_selected_chat()
             {
-                Console.WriteLine($"Send: {msq}");
+                foreach (var msq in ChatDict[channel_number])
+                {
+                    Console.WriteLine($"{msq.Time} | {msq.Athor} | {msq.Text}");
+
+                }
             }
 
+            public void Send_messange(string msg)
+            {
+                ChatDict[channel_number].Add(new Messange(msg));
+            }
 
         }
 
@@ -68,7 +113,6 @@ namespace Lab3
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            short channel_number = 1;
             Database DB = new Database();
             while (true)
             {
@@ -76,7 +120,7 @@ namespace Lab3
                 switch (selectedOption)
                 {
                     case MenuOptions.Read:
-                        DB.Print_chat(channel_number);
+                        DB.Print_selected_chat();
                         break;
                     case MenuOptions.Send:
                         Console.WriteLine($"Введіть повідомлення");
@@ -85,8 +129,8 @@ namespace Lab3
                         break;
                     case MenuOptions.Change_channel:
                         Console.WriteLine($"Введіть номер");
-                        string channel = Console.ReadLine();
-                        Console.WriteLine($"Канал змінено на {channel}");
+                        DB.channel_number = short.Parse(Console.ReadLine());
+                        Console.WriteLine($"Канал змінено на {DB.channel_number}");
                         break;
                     case MenuOptions.Exit:
                         Environment.Exit(0);
