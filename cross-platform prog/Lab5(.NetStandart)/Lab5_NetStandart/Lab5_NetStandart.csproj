@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Lab5_NetStandart</AssemblyName>
+    <RootNamespace>Lab5_NetStandart</RootNamespace>
+    <PackageId>Lab5_NetStandart</PackageId>
+  </PropertyGroup>
+
+</Project>
