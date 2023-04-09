@@ -1,11 +1,41 @@
 #include "Train.h"
 #include <iostream>
 
-void DayTime::print_time() const {
-    std::cout << hours << ":" << minutes << ":" << seconds << std::endl;
+using namespace std;
+
+
+
+std::string TrainSystem::DayTime::get_time(){
+    return to_string(hours) + ":" + to_string(minutes) + ":" + to_string(seconds);
 }
 
-DayTime::DayTime() {
+std::string TrainSystem::DayTime::get_date() {
+    return to_string(day) + "-" + to_string(month) + "-" + to_string(year);
+}
+
+void TrainSystem::DayTime::set_time(int hour, int minute, int second) {
+    if (hour <= 24 && hour >= 0 && minute <= 60 && minute >= 0 && second <= 60 && second >= 0) {
+        this->hours = hour;
+        this->minutes = minute;
+        this->seconds = second;
+    }
+    else {
+        cout << "Incorect time";
+    }
+}
+
+void TrainSystem::DayTime::set_date(int day, int month, int year) {
+    if (day <= 31 && day >= 1 && month <= 12 && month >= 1 && year >= 1970) {
+        this->day = day;
+        this->month = month;
+        this->year = year;
+    }
+    else {
+        cout << "Incorect date";
+    }
+}
+
+TrainSystem::DayTime::DayTime() {
     day = 0;
     month = 0;
     year = 0;
@@ -15,7 +45,7 @@ DayTime::DayTime() {
     hours = 0;
 }
 
-DayTime::DayTime(int h, int m, int s) {
+TrainSystem::DayTime::DayTime(int h, int m, int s) {
     day = 0;
     month = 0;
     year = 0;
@@ -25,47 +55,49 @@ DayTime::DayTime(int h, int m, int s) {
     hours = h;
 }
 
-RoutePoint::RoutePoint(DayTime schedule_time, ReachTime reach_time, StaticElement* destination) {
+TrainSystem::RoutePoint::RoutePoint(DayTime schedule_time, ReachTime reach_time, StaticElement* destination) {
     this->destination = destination;
     this->schedule_time = schedule_time;
     this->reach_time = reach_time;
 
 }
 
-std::string RoutePoint::get_type() const{
+std::string TrainSystem::RoutePoint::get_type() {
     return destination->type;
 }
 
-Position RoutePoint::get_position() {
+Position TrainSystem::RoutePoint::get_position() {
     return destination->get_position();
 }
 
-void RoutePoint::print_info() const{
-    std::cout << std::endl << "-----------------------------" << std::endl;
+void TrainSystem::RoutePoint::print_info() {
+    cout << endl << "-----------------------------" << endl;
 
-    std::cout << "Destination information" << std::endl;
+    cout << "Destination information" << endl;
     destination->print_info();
 
-    std::cout << "Time information" << std::endl;
-    std::cout << "Schedule_time - ";
-    schedule_time.print_time();
-    std::cout << std::endl;
+    cout << "Time information" << endl;
+    cout << "Schedule_time - ";
+    cout << schedule_time.get_time();
+    cout << endl;
 
     if (reach_time.isReach == true) {
-        std::cout << "Reach_time - ";
-        reach_time.reach_time.print_time();
-        std::cout << std::endl;
+        cout << "Reach_time - ";
+        cout << reach_time.reach_time.get_time();
+        cout << endl;
     }
     else {
-        std::cout << "Not Reach" << std::endl;
+        cout << "Not Reach" << endl;
     }
 
 
-    std::cout << "-----------------------------" << std::endl;
+    cout << "-----------------------------" << endl;
 }
 
 
-Train::Train(TrainType type) {
+TrainSystem::Train::Train(TrainType type) {
+    number_of_trains++;
+    //TrainSystem::UpdateCount();
     speed = 0;
     _position.x = 0;
     _position.y = 0;
@@ -74,42 +106,45 @@ Train::Train(TrainType type) {
     _route = std::vector<RoutePoint>();
 };
 
-Position Train::get_position() const{
-    return _position;
+Position TrainSystem::Train::get_position(){
+    return this->_position;
 }
 
-void Train::set_speed(int s) {
+void TrainSystem::Train::set_speed(int s) {
     speed = s;
 }
 
-void Train::set_position(int x, int y) {
+void TrainSystem::Train::set_position(int x, int y) {
     _position.x = x;
     _position.y = y;
 }
 
-void Train::add_route_point(RoutePoint r_point){
+void TrainSystem::Train::add_route_point(RoutePoint r_point){
     _route.push_back(r_point);
 }
 
-void Train::print_info() const {
+void TrainSystem::Train::print_info(){
     switch (type) {
     case Passenger:
-        std::cout << "Train type - passenger" << std::endl; break;
+        cout << "Train type - passenger" << endl; break;
     case Freight:
-        std::cout << "Train type - freight" << std::endl; break;
+        cout << "Train type - freight" << endl; break;
     case Undifinded:
-        std::cout << "Train type - undefinded" << std::endl; break;
+        cout << "Train type - undefinded" << endl; break;
     }
     
-    std::cout << "Position - " << _position.x << ", " << _position.y << std::endl;
-    std::cout << "Speed -" << speed << std::endl;
+    cout << "Position - " << _position.x << ", " << _position.y << endl;
+    cout << "Speed -" << speed << endl;
 
     print_route();
 }
 
-void Train::print_route() const{
+void TrainSystem::Train::print_route(){
     int s = _route.size();
     for (int i = 0; i < s; i++) {
         _route[i].print_info();
     }
+}
+void TrainSystem::Train::print_number_of_trains(){
+    cout << "Number of train: " << number_of_trains << endl;
 }
