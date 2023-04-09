@@ -9,71 +9,91 @@
 #ifndef LAB4_TRAIN_H
 #define LAB4_TRAIN_H
 
-class DayTime {
-public:
-    unsigned short int seconds;
-    unsigned short int minutes;
-    unsigned short int hours;
+using namespace Element;
 
-    unsigned short int day;
-    unsigned short int month;
-    unsigned short int year;
+namespace TrainSystem {
+    static int number_of_trains = 0;
 
-    DayTime();
-    DayTime(int h, int m, int s);
+    //void UpdateCount() {
+    //    number_of_trains++;
+    //}
 
-    void print_time() const;
-};
 
-struct ReachTime {
-    bool isReach{};
-    DayTime reach_time;
-};
+    class DayTime {
+    private:
+        unsigned short int seconds;
+        unsigned short int minutes;
+        unsigned short int hours;
 
-class RoutePoint {
-    StaticElement* destination;
-public:
-    DayTime schedule_time{};
-    ReachTime reach_time{};
+        unsigned short int day;
+        unsigned short int month;
+        unsigned short int year;
+    public:
 
-    RoutePoint(DayTime schedule_time, ReachTime reach_time, StaticElement* destination);
 
-    std::string get_type() const;
-    Position get_position();
-    void print_info() const;
+        DayTime();
+        DayTime(int h, int m, int s);
 
-};
+        void set_time(int hour, int minute, int second);
+        void set_date(int day, int month, int yeah);
+        std::string get_time();
+        std::string get_date();
 
-enum TrainType{
-    Freight,
-    Passenger,
-    Undifinded
-};
 
-class ITrain {
-public:
-    virtual Position get_position() const = 0;
-    virtual void print_info() const = 0;
-};
+    };
 
-class Train : ITrain {
-    Position _position;
-    std::vector<RoutePoint> _route;
-public:
-    int speed;
-    TrainType type;
-    Train(TrainType type);
+    struct ReachTime {
+        bool isReach{};
+        DayTime reach_time;
+    };
 
-    Position get_position() const override;
+    class RoutePoint {
+    private:
+        StaticElement* destination;
+    public:
+        DayTime schedule_time{};
+        ReachTime reach_time{};
 
-    virtual void add_route_point(RoutePoint r_point);
-    virtual void set_speed(int s);
-    virtual void set_position(int x, int y);
+        RoutePoint(DayTime schedule_time, ReachTime reach_time, StaticElement* destination);
 
-    virtual void print_info() const override;
-    virtual void print_route() const;
-};
+        std::string get_type();
+        Position get_position();
+        void print_info();
 
+    };
+
+    enum TrainType {
+        Freight,
+        Passenger,
+        Undifinded
+    };
+
+    class ITrain {
+    public:
+        virtual Position get_position() { return Position(); };
+        virtual void print_info() {};
+    };
+
+    class Train : ITrain {
+        Position _position;
+        std::vector<RoutePoint> _route;
+    public:
+
+        int speed;
+        TrainType type;
+        Train(TrainType type);
+
+        Position get_position();
+
+        virtual void add_route_point(RoutePoint r_point);
+        virtual void set_speed(int s);
+        virtual void set_position(int x, int y);
+
+        virtual void print_info();
+        virtual void print_route();
+        static void print_number_of_trains();
+    };
+}
 
 #endif //LAB4_TRAIN_H
 
