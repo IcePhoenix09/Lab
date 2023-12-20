@@ -7,7 +7,7 @@ public class TableReservationApp
 {
     static void Main(string[] args)
     {
-        ReservationManagerClass manager = new();
+        ReservationManager manager = new();
         manager.AddRestaurant("A", 10);
         manager.AddRestaurant("B", 5);
 
@@ -17,16 +17,12 @@ public class TableReservationApp
 }
 
 
-<<<<<<< HEAD
 public class ReservationManager
-=======
-public class ReservationManagerClass
->>>>>>> 6eb7b895de2a445ae9899ff108f982ef8d1aca17
 {
 
     public List<Restaurant> restaurants;
 
-    public ReservationManagerClass()
+    public ReservationManager()
     {
         restaurants = new List<Restaurant>();
     }
