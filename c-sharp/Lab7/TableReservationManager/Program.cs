@@ -17,7 +17,11 @@ public class TableReservationApp
 }
 
 
+<<<<<<< HEAD
 public class ReservationManager
+=======
+public class ReservationManagerClass
+>>>>>>> 6eb7b895de2a445ae9899ff108f982ef8d1aca17
 {
 
     public List<Restaurant> restaurants;
