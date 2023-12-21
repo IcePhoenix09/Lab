@@ -11,13 +11,15 @@ namespace TableReservationManager{
             manager.AddRestaurant("A", 10);
             manager.AddRestaurant("B", 5);
 
-            // System.Console.WriteLine(manager.GetAllFreeTables(new DateTime(2023, 12, 25)));
+            var date = new DateTime(2023, 12, 25);      
 
-            Console.WriteLine(manager.BookTable("Mak", new DateTime(2023, 12, 25), 3)); // True
-            Console.WriteLine(manager.BookTable("Mak", new DateTime(2023, 12, 25), 3)); // False
+            Console.WriteLine(manager.BookTable("Mak", date, 3)); // True
+            Console.WriteLine(manager.BookTable("Mak", date, 3)); // False
+
+            manager.SortRestaurantsByAvailability(date);
 
             foreach (KeyValuePair<Restaurant, List<Table>> restaurantPair in 
-                    manager.GetAllFreeTables(new DateTime(2023, 12, 25))){
+                    manager.GetAllFreeTables(date)){
                 Console.WriteLine($"{restaurantPair.Key.Name} has {restaurantPair.Value.Count} free seats");
             }
 

@@ -68,55 +68,12 @@ namespace TableReservationManager{
             throw new ArgumentException($"Restaurant '{restaurantName}' not found");
         }
 
-        public void SortRestaurantsByAvailabilityForUsers(DateTime dt)
+        public void SortRestaurantsByAvailability(DateTime dt)
         {
-            try
-            { 
-                bool swapped;
-                do
-                {
-                    swapped = false;
-                    for (int i = 0; i < Restaurants.Count - 1; i++)
-                    {
-                        int avTc = CountAvailableTables(Restaurants[i], dt); // available tables current
-                        int avTn = CountAvailableTables(Restaurants[i + 1], dt); // available tables next
-
-                        if (avTc < avTn)
-                        {
-                            // Swap restaurants
-                            var temp = Restaurants[i];
-                            Restaurants[i] = Restaurants[i + 1];
-                            Restaurants[i + 1] = temp;
-                            swapped = true;
-                        }
-                    }
-                } while (swapped);
-            }
-            catch (Exception)
+            Restaurants.Sort((Restaurant x, Restaurant y) =>
             {
-                Console.WriteLine("Error");
-            }
-        }
-
-        public int CountAvailableTables(Restaurant restaurant, DateTime time)
-        {
-            try
-            {
-                int count = 0;
-                foreach (var table in restaurant.tables)
-                {
-                    if (!table.IsBooked(time))
-                    {
-                        count++;
-                    }
-                }
-                return count;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error");
-                return 0;
-            }
+                return y.CountAvailableTables(dt).CompareTo(x.CountAvailableTables(dt));
+            });
         }
     }
 }

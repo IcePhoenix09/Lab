@@ -28,6 +28,18 @@ namespace TableReservationManager{
             }
             return freeTable;
         }
+
+        public int CountAvailableTables(DateTime date){
+            int count = 0;
+            foreach (Table table in tables)
+            {
+                if (!table.IsBooked(date))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 
     public class Table
