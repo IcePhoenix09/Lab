@@ -1,46 +1,41 @@
+using System.Text.Json;
+using System.Text;
+
+
 namespace TableReservationManager{
+
     public class ReservationManager
     {
+        private List<Restaurant> Restaurants;
 
-        private List<Restaurant> restaurants;
-
-        public ReservationManager()
-        {
-            restaurants = new List<Restaurant>();
+        public ReservationManager(){
+            Restaurants = new List<Restaurant>();
         }
 
         public void AddRestaurant(string name, int number_of_tables)
         {
-            if (restaurants.Exists(restaurant => restaurant.name == name)){
+            if (Restaurants.Exists(restaurant => restaurant.Name == name)){
                 throw new ArgumentException($"Restaurant '{name}' is already added");
             } else {
                 Restaurant newRestaurant = new(name, number_of_tables);
-                restaurants.Add(newRestaurant);
+                Restaurants.Add(newRestaurant);
             }       
         }
 
-        private void LoadRestaurants(string filePath)
-        {
-            //TODO change to json
-            try
-            {
-                string[] ls = File.ReadAllLines(filePath);
-                foreach (string l in ls)
-                {
-                    var parts = l.Split(',');
-                    if (parts.Length == 2 && int.TryParse(parts[1], out int tableCount))
-                    {
-                        AddRestaurant(parts[0], tableCount);
-                    }
-                    else
-                    {
-                        Console.WriteLine(l);
+        public void LoadRestaurants(string pathToFile){
+            string jsonString = File.ReadAllText(pathToFile);
+            List<RestorantData>? jsonData = JsonSerializer.Deserialize<List<RestorantData>>(jsonString);
+
+            if (jsonData == null){
+                throw new NullReferenceException($"JSON file at - '{pathToFile}' is probably empty or not valid");
+            } else{
+                foreach (RestorantData item in jsonData){
+                    if (item.Name == null || item.Name == ""){
+                        throw new NullReferenceException("Name field could not be empty");
+                    } else {
+                        Restaurants.Add(new Restaurant(item.Name, item.NumberOfTables));
                     }
                 }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error");
             }
         }
 
@@ -49,13 +44,13 @@ namespace TableReservationManager{
             try
             { 
                 List<string> free = new List<string>();
-                foreach (var restaurant in restaurants)
+                foreach (var restaurant in Restaurants)
                 {
                     for (int i = 0; i < restaurant.tables.Count; i++)
                     {
                         if (!restaurant.tables[i].IsBooked(dt))
                         {
-                            free.Add($"{restaurant.name} - Table {i + 1}");
+                            free.Add($"{restaurant.Name} - Table {i + 1}");
                         }
                     }
                 }
@@ -70,9 +65,9 @@ namespace TableReservationManager{
 
         public bool BookTable(string restaurantName, DateTime date, int tableNumber)
         {
-            foreach (var restaurant in restaurants)
+            foreach (var restaurant in Restaurants)
             {
-                if (restaurant.name == restaurantName)
+                if (restaurant.Name == restaurantName)
                 {
                     if (tableNumber < 0 || tableNumber >= restaurant.tables.Count)
                     {
@@ -94,17 +89,17 @@ namespace TableReservationManager{
                 do
                 {
                     swapped = false;
-                    for (int i = 0; i < restaurants.Count - 1; i++)
+                    for (int i = 0; i < Restaurants.Count - 1; i++)
                     {
-                        int avTc = CountAvailableTables(restaurants[i], dt); // available tables current
-                        int avTn = CountAvailableTables(restaurants[i + 1], dt); // available tables next
+                        int avTc = CountAvailableTables(Restaurants[i], dt); // available tables current
+                        int avTn = CountAvailableTables(Restaurants[i + 1], dt); // available tables next
 
                         if (avTc < avTn)
                         {
                             // Swap restaurants
-                            var temp = restaurants[i];
-                            restaurants[i] = restaurants[i + 1];
-                            restaurants[i + 1] = temp;
+                            var temp = Restaurants[i];
+                            Restaurants[i] = Restaurants[i + 1];
+                            Restaurants[i + 1] = temp;
                             swapped = true;
                         }
                     }

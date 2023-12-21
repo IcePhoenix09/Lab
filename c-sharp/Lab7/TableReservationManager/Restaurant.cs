@@ -1,11 +1,16 @@
+using System.Text.Json.Serialization.Metadata;
+
 namespace TableReservationManager{
+
     public class Restaurant
     {
-        public string name;
+        public string Name {get; set;}
+        public int NumberOfTables {get; set;}
+
         public List<Table> tables = new List<Table>(); 
 
         public Restaurant(string restaurantName, int numberOfTables){
-            name = restaurantName;
+            Name = restaurantName;
             for (int i = 0; i < numberOfTables; i++){
                 tables.Add(new Table());
             }
