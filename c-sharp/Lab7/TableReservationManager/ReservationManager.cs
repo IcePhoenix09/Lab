@@ -39,28 +39,15 @@ namespace TableReservationManager{
             }
         }
 
-        public List<string> FindAllFreeTables(DateTime dt)
+        public Dictionary<Restaurant, List<Table>> GetAllFreeTables(DateTime date)
         {
-            try
-            { 
-                List<string> free = new List<string>();
-                foreach (var restaurant in Restaurants)
-                {
-                    for (int i = 0; i < restaurant.tables.Count; i++)
-                    {
-                        if (!restaurant.tables[i].IsBooked(dt))
-                        {
-                            free.Add($"{restaurant.Name} - Table {i + 1}");
-                        }
-                    }
-                }
-                return free;
-            }
-            catch (Exception)
+            Dictionary<Restaurant, List<Table>> free = new();
+            foreach (var restaurant in Restaurants)
             {
-                Console.WriteLine("Error");
-                return new List<string>();
+                List<Table> freeRestrurantTables = restaurant.GetFreeTables(date);
+                free.Add(restaurant, freeRestrurantTables);
             }
+            return free;
         }
 
         public bool BookTable(string restaurantName, DateTime date, int tableNumber)

@@ -15,6 +15,19 @@ namespace TableReservationManager{
                 tables.Add(new Table());
             }
         }
+
+        public List<Table> GetFreeTables(DateTime date){
+            List<Table> freeTable = new(); 
+
+            foreach (Table table in tables)
+            {
+                if (!table.IsBooked(date))
+                {
+                    freeTable.Add(table);
+                }
+            }
+            return freeTable;
+        }
     }
 
     public class Table
