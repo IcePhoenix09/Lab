@@ -2,7 +2,7 @@ namespace TableReservationManager{
     public class ReservationManager
     {
 
-        public List<Restaurant> restaurants;
+        private List<Restaurant> restaurants;
 
         public ReservationManager()
         {
@@ -11,26 +11,13 @@ namespace TableReservationManager{
 
         public void AddRestaurant(string name, int number_of_tables)
         {
-            try
-            {
-                Restaurant newRestaurant = new()
-                {
-                    name = name,
-                    tables = new Table[number_of_tables]
-                };
-
-                for (int i = 0; i < number_of_tables; i++)
-                {
-                    newRestaurant.tables[i] = new Table();
-                }
+            if (restaurants.Exists(restaurant => restaurant.name == name)){
+                throw new ArgumentException($"Restaurant '{name}' is already added");
+            } else {
+                Restaurant newRestaurant = new(name, number_of_tables);
                 restaurants.Add(newRestaurant);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error");
-            }
+            }       
         }
-
 
         private void LoadRestaurants(string filePath)
         {
@@ -64,7 +51,7 @@ namespace TableReservationManager{
                 List<string> free = new List<string>();
                 foreach (var restaurant in restaurants)
                 {
-                    for (int i = 0; i < restaurant.tables.Length; i++)
+                    for (int i = 0; i < restaurant.tables.Count; i++)
                     {
                         if (!restaurant.tables[i].IsBooked(dt))
                         {
@@ -87,7 +74,7 @@ namespace TableReservationManager{
             {
                 if (restaurant.name == restaurantName)
                 {
-                    if (tableNumber < 0 || tableNumber >= restaurant.tables.Length)
+                    if (tableNumber < 0 || tableNumber >= restaurant.tables.Count)
                     {
                         throw new Exception(null); //Invalid table number
                     }
