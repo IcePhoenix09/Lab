@@ -23,6 +23,8 @@ namespace TableReservationManager{
                 Console.WriteLine($"{restaurantPair.Key.Name} has {restaurantPair.Value.Count} free seats");
             }
 
+            UnitTests.StartTesting();
+
         }
     }
 }

@@ -5,7 +5,6 @@ namespace TableReservationManager{
     public class Restaurant
     {
         public string Name {get; set;}
-        public int NumberOfTables {get; set;}
 
         public List<Table> tables = new List<Table>(); 
 

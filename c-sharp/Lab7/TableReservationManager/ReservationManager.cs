@@ -22,6 +22,10 @@ namespace TableReservationManager{
             }       
         }
 
+        public List<Restaurant> GetRestaurant(){
+            return Restaurants;
+        }
+
         public void LoadRestaurants(string pathToFile){
             string jsonString = File.ReadAllText(pathToFile);
             List<RestorantData>? jsonData = JsonSerializer.Deserialize<List<RestorantData>>(jsonString);
