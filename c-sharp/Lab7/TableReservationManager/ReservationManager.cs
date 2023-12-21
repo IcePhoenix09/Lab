@@ -58,14 +58,14 @@ namespace TableReservationManager{
                 {
                     if (tableNumber < 0 || tableNumber >= restaurant.tables.Count)
                     {
-                        throw new Exception(null); //Invalid table number
+                        throw new ArgumentOutOfRangeException($"Argument tableNumber should be between in range 0 and {restaurant.tables.Count}. Got {tableNumber} instead");
                     }
 
                     return restaurant.tables[tableNumber].Book(date);
                 }
             }
 
-            throw new Exception(null); //Restaurant not found
+            throw new ArgumentException($"Restaurant '{restaurantName}' not found");
         }
 
         public void SortRestaurantsByAvailabilityForUsers(DateTime dt)
