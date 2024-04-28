@@ -100,7 +100,6 @@ class SimpleList{
   replaceLines(items){
     this.deleteAllLines();
     this.addMultipleLines(items);
-    this.saveChanges();
   }
 
   saveChanges(){
