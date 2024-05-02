@@ -83,10 +83,12 @@ class SimpleTable{
       newRow.insertCell(i).innerHTML = row[i]; 
     }
 
+    const rowIndex = this.table.rows.length - 2;
     const deleteButton = new ActionButton(newRow, 'Delete', () => {
       newRow.remove();
       deleteButton.remove();
-      this.onDeleteRow();
+      
+      this.onDeleteRow(rowIndex);
     });
     deleteButton.placeAtContext();
   }

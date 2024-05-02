@@ -35,12 +35,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/lists', (req, res) => {
-  res.json(data);
+  listsName = data.purchases.map((list) => list.name);
+  res.json({lists: listsName});
 });
 
 app.get('/list/:name', (req, res) => {
   const purchases = data.purchases.find((purchases) => purchases.name == req.params.name);
   res.json(purchases.list);
+});
+
+app.post('/list/new/:name', (req, res) => {
+  const listName = req.params.name;
+  data.purchases.push({name: listName, list: []})
+  console.log("New list created with name - " + listName);
+  res.json(data.purchases);
 });
 
 app.post('/list/add/:name', (req, res) => {
@@ -59,7 +67,19 @@ app.post('/lists/new', (req, res) => {
   res.send("Creare new list");
 });
 
-app.delete('/list/delete')
+app.delete('/list/row/delete', (req, res) => {
+  const purchases = data.purchases.find((purchases) => purchases.name == req.query.name);
+  const index = req.query.index;
+  purchases.list.splice(index, 1);
+  console.log("Delete with index: " + index);
+  res.status(200);
+})
+
+app.delete('/list/delete/:name', (req, res) => {
+  const purchases = data.purchases.find((purchases) => purchases.name == req.params.name);
+  data.purchases.splice(data.purchases.indexOf(purchases), 1);
+  res.json(purchases.list);
+})
 
 app.listen(3000, () => {
   console.log('Server is listening at port 3000');
