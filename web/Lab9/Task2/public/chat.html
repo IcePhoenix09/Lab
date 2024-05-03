@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #b9acac;
+      }
+      </style>
+  </head>
+  <body> 
+    <h1>Chat app</h1>
+    <p id="user_name"></p>
+    <table id="main_table">
+      <tr> 
+        <th>User name</th>
+        <th>Message</th>
+      </tr>
+    </table>
+    <h3> Post new message</h3>
+    <div id="post_form"> 
+    </div>
+    <script src="/js/client.js"></script>
+    <script src="/js/elements/form.js"></script>
+    <script src="/js/elements/table.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
