@@ -3,7 +3,7 @@ let client = new Client('http://localhost:3000');
 
 let table = new PurchasesTable(document.body, onDeleteRow, onAddRow)
 let list = new SimpleList(document.body);
-let panel = new ListControlPannel(document.body, onAddList)
+let panel = new ListControlPannel(document.body, onAddList, onDeleteList)
 
 // create form to input lisy name
 const header = document.createElement('h3');
@@ -57,9 +57,9 @@ async function onAddList(listName){
   updateList();
   table.clearTable();
 }
-// async function onDeleteList(){
-//   await client.deleteList();
-//   updateCurrentListInfo();
-//   updateList();
-//   table.clearTable();
-// }
+async function onDeleteList(){
+  await client.deleteList();
+  updateCurrentListInfo();
+  updateList();
+  table.clearTable();
+}

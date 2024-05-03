@@ -54,6 +54,7 @@ class ListControlPannel{
 
   placeAtContext(){
     this.context.appendChild(this.addButtonField);
+    this.context.appendChild(document.createElement('br'));
     this.context.appendChild(this.deleteButtonField);
     this.createAddButton();
     this.createDeleteButton();
@@ -73,7 +74,7 @@ class ListControlPannel{
   }
   
   createDeleteButton(){
-    let deleteButton = new ActionButton(this.addButtonField, "Delete this list", () => {
+    let deleteButton = new ActionButton(this.deleteButtonField, "Delete this list", () => {
       this.onDelete();
     });
     deleteButton.placeAtContext();
